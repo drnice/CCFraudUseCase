@@ -1,10 +1,11 @@
 # CCFraudUseCase
 
 # Data Generation tool
-Data generation using python alon with two files (name_cc.csv and zipcode.csv).
+Data generation using python scripte along with two data files (name_cc.csv and zipcode.csv).
 
-all files below in the same directory.
-Execute command as follows
+all files below need to reside in the same directory - for now.
+
+Execute command as follows:
 
 python readrandom0.5.py
 
