@@ -91,7 +91,7 @@ if os.path.isfile('numtrans2fraud'):
     num_of_trans=int(num_of_trans)
     num_before_fraud=int(num_before_fraud)
     num_before_fraud= num_before_fraud - num_of_trans
-    if int(num_before_fraud)==0:
+    if int(num_before_fraud)<=0:
         os.remove('numtrans2fraud')
         flagfraud=3
     else:
