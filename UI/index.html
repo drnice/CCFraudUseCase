@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      #map {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+
+      /* Sticky footer styles
+      -------------------------------------------------- */
+
+      html,
+      body {
+        height: 100%;
+        /* The html and body elements cannot have any padding or margin. */
+      }
+
+      /* Wrapper for page content to push down footer */
+      #wrap {
+        min-height: 100%;
+        height: auto !important;
+        height: 100%;
+        /* Negative indent footer by it's height */
+        margin: 0 auto -60px;
+      }
+
+      /* Set the fixed height of the footer here */
+      #push,
+      #footer {
+        height: 60px;
+      }
+      #footer {
+        background-color: #f5f5f5;
+        z-index: 9999;
+      }
+
+      /* Lastly, apply responsive CSS fixes as necessary */
+      @media (max-width: 767px) {
+        #footer {
+          margin-left: -20px;
+          margin-right: -20px;
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      }
+
+    </style>
+    <script>
+      // Yeah, yeah, but global variables are easy to use for this.
+      var map;
+      var frequency = 300;  // frequency of polls in ms
+      var timer;
+      var timerRunning = false;
+
+      function initMap() {
+        var mapDiv = document.getElementById('map');
+        map = new google.maps.Map(mapDiv, {
+          center: {lat: 34.9852774, lng: -115.7692865},
+          zoom: 4
+        });
+
+        map.data.setStyle(function(transaction) {
+          var size = transaction.getProperty('cost');
+          // TODO: Set color based on transaction status
+          return {
+            icon: getCircle(size)
+          };
+
+        });
+      }
+
+      function addPoint(data) {
+        map.data.addGeoJson(data);
+        console.log(JSON.stringify(data));
+      }
+
+      function getCircle(size) {
+        var circle = {
+          path: google.maps.SymbolPath.CIRCLE,
+          fillColor: 'red', // FIXME: Use green if not fraudulent
+          fillOpacity: .2,
+          scale: size / 10,
+          strokeColor: 'white',
+          strokeWeight: .5
+        };
+
+        return circle;
+      }
+
+      function toggleOptions() {
+        var o = document.getElementById('div-options');
+        var b = document.getElementById('btn-options');
+
+        if (o.style.display == 'none') {
+          o.style.display = 'block';
+          b.innerHTML = 'Hide options';
+        }
+        else {
+          o.style.display = 'none';
+          b.innerHTML = 'Show options';
+        }
+      }
+
+      function startTimer(frequency) {
+        timer = setInterval(poll, frequency);
+      }
+
+      function stopTimer() {
+        window.clearInterval(timer);
+        timerRunning = false;
+      }
+
+      function poll() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+              addPoint(JSON.parse(xhr.responseText));
+            }
+        }
+        xhr.open('GET', 'http://172.24.2.242:9095/singleRecord');
+        xhr.send();
+      }
+
+      function startStopTimer()
+      {
+        // Toggle button text and timer functionality
+        var b = document.getElementById('btn-timer');
+        if (b.value == 1) {
+          b.value = 0;
+          b.innerHTML = 'Stop timer';
+          b.classList.remove('btn-default');
+          b.classList.add('btn-danger');
+
+          timerRunning = true;
+          startTimer(frequency);
+        }
+        else {
+          b.value = 1;
+          b.innerHTML = 'Start timer';
+          b.classList.remove('btn-danger');
+          b.classList.add('btn-success');
+
+          timerRunning = false;
+          stopTimer();
+        }
+      }
+
+      function updateFreq() {
+        var minFreq = 300;
+        var maxFreq = 10000;
+
+        f = document.getElementById('optionFrequency');
+
+        if (f.value < minFreq)
+          f.value = minFreq;
+        if (f.value > maxFreq)
+          f.value = maxFreq;
+
+        frequency = f.value;
+        if (timerRunning)
+          startTimer(frequency);
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?callback=initMap"
+        async defer></script>
+  </head>
+  <body>
+    <div class="container" id="wrap">
+      <div class="row">
+        <div id="map"></div>
+      </div>
+
+
+
+    </div>
+
+
+   <div id="footer">
+      <div class="container">
+        <div class="row" style="position: relative; top: 12px;">
+          <div class="col-md-2"><button class="btn btn-default" id="btn-options" onClick="toggleOptions();">Show options</button></div>
+          <div class="col-md-10">
+            <div class="row" id="div-options" style="display: none">
+              <div class="col-md-2">
+                <button class="btn btn-success" id='btn-timer' onClick="startStopTimer();" value=1>Start timer</button>
+              </div>
+              <div class="col-md-10">
+                <form class="form-inline" action="#">
+                  <div class="form-group">
+                    <label for="optionFrequency">Event frequency (ms)</label>
+                    <input type="text" class="form-control" id="optionFrequency" value="3000" placeholder="1000" onBlur="updateFreq();" onChange="updateFreq();">
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
