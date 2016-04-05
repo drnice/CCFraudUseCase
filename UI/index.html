@@ -166,6 +166,12 @@
         if (timerRunning)
           startTimer(frequency);
       }
+
+      function clearMap() {
+        map.data.forEach(function(feature) {
+          map.data.remove(feature);
+        });
+      }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?callback=initMap"
         async defer></script>
@@ -190,13 +196,16 @@
               <div class="col-md-2">
                 <button class="btn btn-success" id='btn-timer' onClick="startStopTimer();" value=1>Start timer</button>
               </div>
-              <div class="col-md-10">
+              <div class="col-md-8">
                 <form class="form-inline" action="#">
                   <div class="form-group">
                     <label for="optionFrequency">Event frequency (ms)</label>
                     <input type="text" class="form-control" id="optionFrequency" value="3000" placeholder="1000" onBlur="updateFreq();" onChange="updateFreq();">
                   </div>
                 </form>
+              </div>
+              <div class="col-md-2">
+                <button class="btn btn-warning" id='btn-clear' onClick="clearMap();">Clear map</button>
               </div>
             </div>
           </div>
