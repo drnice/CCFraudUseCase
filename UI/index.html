@@ -54,7 +54,7 @@
     <script>
       // Yeah, yeah, but global variables are easy to use for this.
       var map;
-      var frequency = 300;  // frequency of polls in ms
+      var frequency = 1000;  // frequency of polls in ms
       var timer;
       var timerRunning = false;
 
@@ -200,7 +200,7 @@
                 <form class="form-inline" action="#">
                   <div class="form-group">
                     <label for="optionFrequency">Event frequency (ms)</label>
-                    <input type="text" class="form-control" id="optionFrequency" value="3000" placeholder="1000" onBlur="updateFreq();" onChange="updateFreq();">
+                    <input type="text" class="form-control" id="optionFrequency" value="1000" placeholder="1000" onBlur="updateFreq();" onChange="updateFreq();">
                   </div>
                 </form>
               </div>
