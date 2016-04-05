@@ -76,8 +76,24 @@
       }
 
       function addPoint(data) {
+        var t = document.getElementById('table-data');
+
         map.data.addGeoJson(data);
         console.log(JSON.stringify(data));
+
+        var r = t.insertRow(-1);
+        var c0 = r.insertCell(0);
+        var c1 = r.insertCell(1);
+        var c2 = r.insertCell(2);
+        var c3 = r.insertCell(3);
+
+        c0.innerHTML = data.properties.fname + " " + data.properties.lname;
+        c1.innerHTML = data.properties.city;
+        c2.innerHTML = data.properties.state;
+        c3.innerHTML = data.properties.cost;
+
+        if (t.rows.length > 10)
+          t.deleteRow(1);
       }
 
       function getCircle(size) {
@@ -171,6 +187,10 @@
         map.data.forEach(function(feature) {
           map.data.remove(feature);
         });
+
+        var t = document.getElementById("table-data");
+        for (var i=t.rows.length; --i>0;)
+          t.deleteRow(i);
       }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?callback=initMap"
@@ -179,12 +199,23 @@
   <body>
     <div class="container" id="wrap">
       <div class="row">
-        <div id="map"></div>
+        <div class="col-md-10" style="height: 800px !important">
+            <div id="map"></div>
+        </div>
+
+          <div class="col-md-2" style="min-height: 800px;">
+            <table class="table" id="table-data">
+              <tr>
+                <th>Name</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Amount</th>
+              </tr>
+            </table>
+          </div>
+
+        </div>
       </div>
-
-
-
-    </div>
 
 
    <div id="footer">
