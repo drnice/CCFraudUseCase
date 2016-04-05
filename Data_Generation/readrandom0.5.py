@@ -122,7 +122,7 @@ for x in range(0, int(num_of_trans)):
 
     #transaction={x :{'type':'Feature', 'properties': {'date':int(time.time()), 'fname':splitstring[0], 'lname':splitstring[1], 'cc':splitstring[2], 'zip':splitstring[3], 'city':splitstring[4], 'state':splitstring[5], 'cost':random.randint(1,800)}, 'geometry':{'type':'Point', 'coordinates':[float(splitstring[7]), float(splitstring[6])]}}}
 
-    transaction={'type':'Feature', 'properties': {'date':int(time.time()), 'fname':splitstring[0], 'lname':splitstring[1], 'cc':splitstring[2], 'zip':splitstring[3], 'city':splitstring[4], 'state':splitstring[5], 'cost':random.randint(1,800)}, 'geometry':{'type':'Point', 'coordinates':[float(splitstring[6]), float(splitstring[7])]}}
+    transaction={'type':'Feature', 'properties': {'date':int(time.time()), 'fname':splitstring[0], 'lname':splitstring[1], 'cc':splitstring[2], 'zip':splitstring[3], 'city':splitstring[4], 'state':splitstring[5], 'cost':random.randint(1,800)}, 'geometry':{'type':'Point', 'coordinates':[float(splitstring[7]), float(splitstring[6])]}}
 
 
     sys.stdout.write(json.dumps(transaction))
