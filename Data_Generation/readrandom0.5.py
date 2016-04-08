@@ -121,7 +121,6 @@ for x in range(0, int(num_of_trans)):
         #print "fraud # " + str(num_before_fraud)
         #print "x " + str(x)
         if int(num_before_fraud)==x:
-            #print "YUPPIE "
             linecc=keeplinecc
 
     if os.path.isfile('ccfraud') and flagfraud == 1:
@@ -139,8 +138,10 @@ for x in range(0, int(num_of_trans)):
     splitstring=transaction_comma.split(',')
 
     #transaction={x :{'type':'Feature', 'properties': {'date':int(time.time()), 'fname':splitstring[0], 'lname':splitstring[1], 'cc':splitstring[2], 'zip':splitstring[3], 'city':splitstring[4], 'state':splitstring[5], 'cost':random.randint(1,800)}, 'geometry':{'type':'Point', 'coordinates':[float(splitstring[7]), float(splitstring[6])]}}}
-
-    transaction={'type':'Feature', 'properties': {'date':int(time.time()), 'fname':splitstring[0], 'lname':splitstring[1], 'cc':splitstring[2], 'zip':splitstring[3], 'city':splitstring[4], 'state':splitstring[5], 'cost':random.randint(1,800)}, 'geometry':{'type':'Point', 'coordinates':[float(splitstring[7]), float(splitstring[6])]}}
+    if int(num_before_fraud)==x:
+        transaction={'type':'Feature', 'properties': {'fraud': True, 'date':int(time.time()), 'fname':splitstring[0], 'lname':splitstring[1], 'cc':splitstring[2], 'zip':splitstring[3], 'city':splitstring[4], 'state':splitstring[5], 'cost':random.randint(1,800)}, 'geometry':{'type':'Point', 'coordinates':[float(splitstring[7]), float(splitstring[6])]}}
+    else:
+        transaction={'type':'Feature', 'properties': {'date':int(time.time()), 'fname':splitstring[0], 'lname':splitstring[1], 'cc':splitstring[2], 'zip':splitstring[3], 'city':splitstring[4], 'state':splitstring[5], 'cost':random.randint(1,800)}, 'geometry':{'type':'Point', 'coordinates':[float(splitstring[7]), float(splitstring[6])]}}
 
 
     sys.stdout.write(json.dumps(transaction))
