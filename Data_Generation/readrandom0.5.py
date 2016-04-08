@@ -76,6 +76,8 @@ num_of_trans=0
 num_before_fraud=0
 transaction=''
 flagfraud=0
+flagfraudthisit=0
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])
@@ -97,7 +99,7 @@ if os.path.isfile('numtrans2fraud'):
     else:
         writefile('numtrans2fraud', str(num_of_trans), 'w')
         writefile('numtrans2fraud', str(num_before_fraud), 'a')
-elif num_of_trans != 0 and num_before_fraud != 0:
+elif (num_of_trans != 0 and num_before_fraud != 0 and int(num_before_fraud) > int(num_of_trans)):   #and num_before_fraud > num_of_trans):
     writefile('numtrans2fraud', num_of_trans, 'w')
     writefile('numtrans2fraud', num_before_fraud, 'a')
     writefile('ccfraud','2','w')
@@ -105,9 +107,23 @@ elif num_of_trans != 0 and num_before_fraud != 0:
 
 if num_of_trans==0:
     num_of_trans=1
+
+if int(num_before_fraud) < int(num_of_trans):
+    flagfraudthisit = 1
+
 for x in range(0, int(num_of_trans)):
     linezip=get_random_line(filezip).rstrip('\r\n')
     linecc=get_random_line(filecc).rstrip('\r\n')
+    if x == 0:
+        keeplinecc = linecc
+        #print "keeplinecc " + str(keeplinecc)
+    if flagfraudthisit==1:
+        #print "fraud # " + str(num_before_fraud)
+        #print "x " + str(x)
+        if int(num_before_fraud)==x:
+            #print "YUPPIE "
+            linecc=keeplinecc
+
     if os.path.isfile('ccfraud') and flagfraud == 1:
         writefile('ccfraud',linecc, 'w')
         flagfraud =2
@@ -116,6 +132,8 @@ for x in range(0, int(num_of_trans)):
         linecc=f.readline().rstrip('\r\n')
         f.close
         os.remove('ccfraud')
+
+
 
     transaction_comma=linecc+','+linezip
     splitstring=transaction_comma.split(',')
