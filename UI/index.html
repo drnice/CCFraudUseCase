@@ -139,7 +139,8 @@
               addPoint(JSON.parse(xhr.responseText));
             }
         }
-        xhr.open('GET', 'http://172.24.2.242:9095/singleRecord');
+        var recs = (document.querySelector('input[name="numRecords"]:checked').value == 1)?"singleRecord":"fiveRecord";
+        xhr.open('GET', 'http://172.24.2.242:9095/' + recs);
         xhr.send();
       }
 
@@ -232,6 +233,15 @@
                   <div class="form-group">
                     <label for="optionFrequency">Event frequency (ms)</label>
                     <input type="text" class="form-control" id="optionFrequency" value="1000" placeholder="1000" onBlur="updateFreq();" onChange="updateFreq();">
+                  </div>
+                  <div class="form-group">
+                    <label for="numRecords">Records per batch</label>
+                    <label class="radio-inline">
+                      <input type="radio" name="numRecords" id="numRecords1" value="1" checked="checked">1</label>
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" name="numRecords" id="numRecords5" value="5">5</label>
+                    </label>
                   </div>
                 </form>
               </div>
