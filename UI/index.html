@@ -62,6 +62,8 @@
         }
       }
 
+
+
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script>
@@ -86,6 +88,11 @@
           };
 
         });
+
+        map.data.addListener('mouseover', function(point) {
+      document.getElementById('fraudInfo').innerHTML = "<table class='table'><tr><th>Date</th><td>" + point.feature.getProperty('date') + "</tr><tr><th>Fraudulent CC number</th><td>" + point.feature.getProperty('cc') + "</td></tr><tr><th>Charge</th><td>$" + point.feature.getProperty('cost') + "</td></tr></table><br /><br /><br />";
+        });
+
       }
 
       function addPoint(data) {
@@ -107,16 +114,17 @@
           var c2 = r.insertCell(2);
           var c3 = r.insertCell(3);
 
-          // TODO: Test for fraudulence
-          if (point.properties.fraud)
+          if (point.properties.fraud) {
             r.classList.add("fraud");
+
+          }
 
           c0.innerHTML = point.properties.fname + " " + point.properties.lname;
           c1.innerHTML = point.properties.city;
           c2.innerHTML = point.properties.state;
           c3.innerHTML = point.properties.cost;
 
-          if (t.rows.length > 25)
+          if (t.rows.length > 21)
             t.deleteRow(1);
         }
       }
@@ -259,19 +267,22 @@
         </div>
 
           <div class="col-md-3" id="sidebar">
-            <table class="table table-hover table-condensed table-responsive" id="table-data">
-              <tr>
-                <th>Name</th>
-                <th>City</th>
-                <th>State</th>
-                <th>Amount</th>
-              </tr>
-            </table>
+            <div class="row" style="max-height: 400px !important;">
+                <table class="table table-hover table-condensed table-responsive" id="table-data">
+                  <tr>
+                    <th>Name</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Amount</th>
+                  </tr>
+                </table>
+            </div>
           </div>
 
         </div>
-      </div>
+        <div id="fraudInfo" style="position: absolute; bottom: 0; left: 10px; background: rgba(100, 100, 100, .4);"></div>
 
+      </div>
 
    <div id="footer">
       <div class="container">
