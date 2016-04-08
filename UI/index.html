@@ -124,7 +124,7 @@
           c2.innerHTML = point.properties.state;
           c3.innerHTML = point.properties.cost;
 
-          if (t.rows.length > 21)
+          if (t.rows.length > 23)
             t.deleteRow(1);
         }
       }
@@ -238,6 +238,8 @@
         var t = document.getElementById("table-data");
         for (var i=t.rows.length; --i>0;)
           t.deleteRow(i);
+
+        document.getElementById("fraudInfo").innerHTML = "";
       }
 
       function resizeMap() {
@@ -280,7 +282,7 @@
           </div>
 
         </div>
-        <div id="fraudInfo" style="position: absolute; bottom: 0; left: 10px; background: rgba(100, 100, 100, .4);"></div>
+        <div id="fraudInfo" style="position: absolute; bottom: 0; left: 10px; /*background: rgba(100, 100, 100, .4);*/"></div>
 
       </div>
 
