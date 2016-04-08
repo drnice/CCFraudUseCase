@@ -27,7 +27,8 @@
         height: auto !important;
         height: 100%;
         /* Negative indent footer by it's height */
-        margin: 0 auto -60px;
+        margin: 0 0 -60px 0;
+        width: 100% !important;
       }
 
       /* Set the fixed height of the footer here */
@@ -51,6 +52,7 @@
       }
 
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script>
       // Yeah, yeah, but global variables are easy to use for this.
       var map;
@@ -78,22 +80,30 @@
       function addPoint(data) {
         var t = document.getElementById('table-data');
 
-        map.data.addGeoJson(data);
-        console.log(JSON.stringify(data));
+        // We can get multiple results at once but they do not come as a proper
+        // JSON object, just multiple JSON strings.  So loop through the
+        // results and extract the individual ones
+        var strings = data.split('\n');
+        for (var i=0; i<strings.length; i++) {
+          point = JSON.parse(strings[i]);
 
-        var r = t.insertRow(-1);
-        var c0 = r.insertCell(0);
-        var c1 = r.insertCell(1);
-        var c2 = r.insertCell(2);
-        var c3 = r.insertCell(3);
+          map.data.addGeoJson(point);
+          console.log(strings[i]);
 
-        c0.innerHTML = data.properties.fname + " " + data.properties.lname;
-        c1.innerHTML = data.properties.city;
-        c2.innerHTML = data.properties.state;
-        c3.innerHTML = data.properties.cost;
+          var r = t.insertRow(-1);
+          var c0 = r.insertCell(0);
+          var c1 = r.insertCell(1);
+          var c2 = r.insertCell(2);
+          var c3 = r.insertCell(3);
 
-        if (t.rows.length > 10)
-          t.deleteRow(1);
+          c0.innerHTML = point.properties.fname + " " + data.properties.lname;
+          c1.innerHTML = point.properties.city;
+          c2.innerHTML = point.properties.state;
+          c3.innerHTML = point.properties.cost;
+
+          if (t.rows.length > 10)
+            t.deleteRow(1);
+        }
       }
 
       function getCircle(size) {
@@ -136,7 +146,7 @@
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState == XMLHttpRequest.DONE) {
-              addPoint(JSON.parse(xhr.responseText));
+              addPoint(xhr.responseText);
             }
         }
         var recs = (document.querySelector('input[name="numRecords"]:checked').value == 1)?"singleRecord":"fiveRecord";
@@ -193,18 +203,33 @@
         for (var i=t.rows.length; --i>0;)
           t.deleteRow(i);
       }
+
+      function resizeMap() {
+        var h = $(window).height(),
+        offsetTop = 60; // Calculate the top offset
+        $('#map').css('height', (h - offsetTop));        
+      }
+
+      $(window).resize(function () {
+        resizeMap()
+      }).resize();
+
+      $(document).ready(function () {
+        resizeMap()
+      }).resize();
+
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?callback=initMap"
         async defer></script>
   </head>
-  <body>
+  <body onLoad="resizeMap()">
     <div class="container" id="wrap">
       <div class="row">
-        <div class="col-md-10" style="height: 800px !important">
+        <div class="col-md-9">
             <div id="map"></div>
         </div>
 
-          <div class="col-md-2" style="min-height: 800px;">
+          <div class="col-md-3" style="height: 100%;">
             <table class="table" id="table-data">
               <tr>
                 <th>Name</th>
@@ -234,6 +259,7 @@
                     <label for="optionFrequency">Event frequency (ms)</label>
                     <input type="text" class="form-control" id="optionFrequency" value="1000" placeholder="1000" onBlur="updateFreq();" onChange="updateFreq();">
                   </div>
+                  <span>&nbsp;&nbsp;</span>
                   <div class="form-group">
                     <label for="numRecords">Records per batch</label>
                     <label class="radio-inline">
