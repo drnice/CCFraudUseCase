@@ -48,6 +48,10 @@
         z-index: 1;
       }
 
+      .fraud {
+        background-color: red;
+      }
+
       /* Lastly, apply responsive CSS fixes as necessary */
       @media (max-width: 767px) {
         #footer {
@@ -76,9 +80,9 @@
 
         map.data.setStyle(function(transaction) {
           var size = transaction.getProperty('cost');
-          // TODO: Set color based on transaction status
+          var fraud = transaction.getProperty('fraud');
           return {
-            icon: getCircle(size)
+            icon: getCircle(size, fraud)
           };
 
         });
@@ -103,6 +107,10 @@
           var c2 = r.insertCell(2);
           var c3 = r.insertCell(3);
 
+          // TODO: Test for fraudulence
+          if (point.properties.fraud)
+            r.classList.add("fraud");
+
           c0.innerHTML = point.properties.fname + " " + point.properties.lname;
           c1.innerHTML = point.properties.city;
           c2.innerHTML = point.properties.state;
@@ -113,10 +121,10 @@
         }
       }
 
-      function getCircle(size) {
+      function getCircle(size, fraud=false) {
         var circle = {
           path: google.maps.SymbolPath.CIRCLE,
-          fillColor: 'red', // FIXME: Use green if not fraudulent
+          fillColor: fraud?'red':'blue',
           fillOpacity: .2,
           scale: Math.sqrt(size),
           strokeColor: 'white',
@@ -156,8 +164,9 @@
               addPoint(xhr.responseText);
             }
         }
-        var recs = (document.querySelector('input[name="numRecords"]:checked').value == 1)?"singleRecord":"fiveRecord";
-        xhr.open('GET', 'http://172.24.2.242:9095/' + recs);
+        xhr.open('GET', 'http://172.24.2.242:9095/ledger');
+        // FIXME:
+        //xhr.setRequestHeader("amount", document.getElementById('numRecords').value);
         xhr.send();
       }
 
@@ -199,6 +208,18 @@
         frequency = f.value;
         if (timerRunning)
           startTimer(frequency);
+      }
+
+      function updateReqs() {
+        var minRecs = 10;
+        var maxRecs = 1000;
+
+        f = document.getElementById('numRecords');
+
+        if (f.value < minRecs)
+          f.value = minRecs;
+        if (f.value > maxRecs)
+          f.value = maxRecs;
       }
 
       function clearMap() {
@@ -270,12 +291,7 @@
                   <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                   <div class="form-group">
                     <label for="numRecords">Records per batch:</label>
-                    <label class="radio-inline">
-                      <input type="radio" name="numRecords" id="numRecords1" value="1" checked="checked">1</label>
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio" name="numRecords" id="numRecords5" value="5">5</label>
-                    </label>
+                    <input type="text" class="form-control" id="numRecords" value="10" placeholder="10" onBlur="updateRecs();" onChange="updateRecs();" style="width: 60px;">
                   </div>
                 </form>
               </div>
