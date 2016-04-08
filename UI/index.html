@@ -45,6 +45,7 @@
         background-color: #333;
         color: white;
         height: 100%;
+        z-index: 1;
       }
 
       /* Lastly, apply responsive CSS fixes as necessary */
@@ -102,12 +103,12 @@
           var c2 = r.insertCell(2);
           var c3 = r.insertCell(3);
 
-          c0.innerHTML = point.properties.fname + " " + data.properties.lname;
+          c0.innerHTML = point.properties.fname + " " + point.properties.lname;
           c1.innerHTML = point.properties.city;
           c2.innerHTML = point.properties.state;
           c3.innerHTML = point.properties.cost;
 
-          if (t.rows.length > 10)
+          if (t.rows.length > 25)
             t.deleteRow(1);
         }
       }
@@ -131,11 +132,11 @@
 
         if (o.style.display == 'none') {
           o.style.display = 'block';
-          b.innerHTML = 'Hide options';
+          b.innerHTML = '« Hide options';
         }
         else {
           o.style.display = 'none';
-          b.innerHTML = 'Show options';
+          b.innerHTML = 'Show options »';
         }
       }
 
@@ -237,7 +238,7 @@
         </div>
 
           <div class="col-md-3" id="sidebar">
-            <table class="table" id="table-data">
+            <table class="table table-hover table-condensed table-responsive" id="table-data">
               <tr>
                 <th>Name</th>
                 <th>City</th>
@@ -254,7 +255,7 @@
    <div id="footer">
       <div class="container">
         <div class="row" style="position: relative; top: 12px;">
-          <div class="col-md-2"><button class="btn btn-default" id="btn-options" onClick="toggleOptions();">Show options</button></div>
+          <div class="col-md-2"><button class="btn btn-primary btn-block" id="btn-options" onClick="toggleOptions();">Show options »</button></div>
           <div class="col-md-10">
             <div class="row" id="div-options" style="display: none">
               <div class="col-md-2">
@@ -263,12 +264,12 @@
               <div class="col-md-8">
                 <form class="form-inline" action="#">
                   <div class="form-group">
-                    <label for="optionFrequency">Event frequency (ms)</label>
+                    <label for="optionFrequency">Event frequency (ms):</label>
                     <input type="text" class="form-control" id="optionFrequency" value="1000" placeholder="1000" onBlur="updateFreq();" onChange="updateFreq();">
                   </div>
                   <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                   <div class="form-group">
-                    <label for="numRecords">Records per batch</label>
+                    <label for="numRecords">Records per batch:</label>
                     <label class="radio-inline">
                       <input type="radio" name="numRecords" id="numRecords1" value="1" checked="checked">1</label>
                     </label>
