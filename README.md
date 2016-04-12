@@ -61,8 +61,10 @@ To install apache, open terminal and type in this command:
 sudo yum install httpd
 
 2.2. Start apache by running
+
 sudo service httpd start
 
 2.3. Make configuration changes for your web services:
+
 vi /etc/httpd/conf/httpd.conf
 
