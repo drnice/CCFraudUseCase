@@ -105,4 +105,5 @@ Verify that the placement of the python script is on you server location in the 
  
  ![Image](../master/Screenshot/ScreenUI-Nifi-HDP.png?raw=true)
  
+ 
 
