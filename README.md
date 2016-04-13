@@ -75,7 +75,8 @@ sudo service httpd start
 
 3. Install Nifi:
 
-To install Nifi on your cluster please follow the steps documented in the following github:
+To install Nifi on your cluster please follow the steps documented in the Ali's github:
+
 https://github.com/abajwa-hw/ambari-nifi-service
 
 
