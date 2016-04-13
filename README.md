@@ -60,11 +60,34 @@ To install apache, open terminal and type in this command:
 
 sudo yum install httpd
 
-2.2. Start apache by running
+2.2. Make configuration changes for your web services:
+
+vi /etc/httpd/conf/httpd.conf
+
+Place the content of the UI folder in the DocumentRoot location to be accessed via the webserver
+DocumentRoot "/var/www/html"
+
+
+2.3. Start apache by running
 
 sudo service httpd start
 
-2.3. Make configuration changes for your web services:
 
-vi /etc/httpd/conf/httpd.conf
+3. Install Nifi:
+
+To install Nifi on your cluster please follow the steps documented in the following github:
+https://github.com/abajwa-hw/ambari-nifi-service
+
+
+4. Import Nifi XML template schema 
+
+After starting Nifi, navigate to the Nifi UI.
+Select the icon marked in with the right red square click it, this 
+would allow you to upload an xml template, use Nifi_demo_se.xml
+(Browse select and import).
+Once the template is loaded you can drag the icon in the red rectangle to the UI view 
+which will enable a popup menu that would display "Nifi_demo_se.xml".
+After selecting this template you view should display the following Nifi flow.
+
+
 
