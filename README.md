@@ -89,5 +89,5 @@ Once the template is loaded you can drag the icon in the red rectangle to the UI
 which will enable a popup menu that would display "Nifi_demo_se.xml".
 After selecting this template you view should display the following Nifi flow.
 
-
+![Image](../master/Screenshot/Nifi-ui1.jpg?raw=true)
 
