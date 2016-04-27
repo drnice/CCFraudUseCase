@@ -98,7 +98,14 @@ Verify that the placement of the python script is on you server location in the 
  To verify you can click the handle_requests process and click the "Ledger transaction" process, 
  right click the "Retrieve_store_Ledger" and inspect the command Arguments property.
  
- If all is good, you can start the flow by licking on the Green "Play" triangle.
+ Use the wrapper script ledger1.sh to wrap around the parameters passed to the python data generating script.
+ In the Nifi UI edit the "Retrieve_Store_ledger" process:
+
+Command Arguments: /ledger1.sh; 
+
+Command Path: bash
+
+ If all is good, you can start the flow by clicking on the Green "Play" triangle.
  
  Now you are ready to launch your UI at the Webserver location you set up on step 2, the 
  following display will show up!
